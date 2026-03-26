@@ -63,6 +63,10 @@ export function UploadButton({ propertyId, prepItemId, label = 'Upload file' }: 
 
     try {
       const supabase = createClient()
+
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('Not authenticated. Please refresh the page and log in again.')
+
       const fileExt = file.name.split('.').pop()
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
       const filePath = `prep/${propertyId}/${prepItemId}/${fileName}`
@@ -88,8 +92,10 @@ export function UploadButton({ propertyId, prepItemId, label = 'Upload file' }: 
         }
       })
     } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Upload failed'
+      console.error('[UploadButton] upload error:', msg, err)
       setStatus('error')
-      setErrorMsg(err instanceof Error ? err.message : 'Upload failed')
+      setErrorMsg(msg)
     }
 
     if (inputRef.current) inputRef.current.value = ''
@@ -165,11 +171,11 @@ export function UploadButton({ propertyId, prepItemId, label = 'Upload file' }: 
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={cn(
-        'block border-2 border-dashed rounded-lg px-4 py-3 text-center transition-colors cursor-pointer',
+        'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-xs font-medium transition-colors cursor-pointer',
         isDragging
-          ? 'border-[#6DBF3A] bg-green-50'
-          : 'border-[#E2E8F0] hover:border-[#3D4F5C]/30',
-        isLoading && 'pointer-events-none'
+          ? 'border-[#6DBF3A] bg-green-50 text-green-700'
+          : 'border-[#E2E8F0] text-[#64748B] hover:border-[#3D4F5C]/40 hover:text-[#3D4F5C] bg-white',
+        isLoading && 'pointer-events-none opacity-60'
       )}
     >
       <input
@@ -177,23 +183,18 @@ export function UploadButton({ propertyId, prepItemId, label = 'Upload file' }: 
         type="file"
         accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx"
         onChange={handleFileChange}
-        className="hidden"
+        className="sr-only"
         disabled={isLoading}
       />
       {isLoading ? (
-        <div className="flex items-center justify-center gap-2 text-sm text-[#64748B]">
-          <Loader2 className="h-4 w-4 animate-spin" />
+        <>
+          <Loader2 className="h-3 w-3 animate-spin" />
           Uploading...
-        </div>
+        </>
       ) : (
         <>
-          <p className="text-xs text-[#64748B] mb-2">
-            {isDragging ? 'Drop file here' : 'Drag & drop or'}
-          </p>
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[#3D4F5C] hover:text-[#6DBF3A] transition-colors">
-            <Upload className="h-3.5 w-3.5" />
-            {label}
-          </span>
+          <Upload className="h-3 w-3" />
+          {isDragging ? 'Drop here' : label}
         </>
       )}
     </label>

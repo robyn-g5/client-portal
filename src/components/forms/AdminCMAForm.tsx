@@ -40,6 +40,10 @@ export function AdminCMAForm({ propertyId }: AdminCMAFormProps) {
     setUploadError(null)
     try {
       const supabase = createClient()
+
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('Not authenticated. Please refresh the page and log in again.')
+
       const ext = file.name.split('.').pop()
       const path = `cma/${propertyId}/${Date.now()}-${Math.random().toString(36).substring(2)}.${ext}`
       const { data, error } = await supabase.storage
@@ -51,7 +55,9 @@ export function AdminCMAForm({ propertyId }: AdminCMAFormProps) {
       setPdfFileName(file.name)
       setUploadStatus('done')
     } catch (err) {
-      setUploadError(err instanceof Error ? err.message : 'Upload failed')
+      const msg = err instanceof Error ? err.message : 'Upload failed'
+      console.error('[AdminCMAForm] upload error:', msg, err)
+      setUploadError(msg)
       setUploadStatus('error')
     }
     if (fileInputRef.current) fileInputRef.current.value = ''
@@ -71,7 +77,10 @@ export function AdminCMAForm({ propertyId }: AdminCMAFormProps) {
   function handleDragLeave(e: React.DragEvent) {
     e.preventDefault()
     e.stopPropagation()
-    setIsDragging(false)
+    // Only clear dragging if leaving the drop zone itself, not a child element
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragging(false)
+    }
   }
 
   function handleDrop(e: React.DragEvent) {
@@ -82,7 +91,7 @@ export function AdminCMAForm({ propertyId }: AdminCMAFormProps) {
     if (file) uploadFile(file)
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!pdfUrl) {
       setFormError('Please upload a PDF before saving.')

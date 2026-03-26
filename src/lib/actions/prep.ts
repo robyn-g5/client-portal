@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 export async function updatePrepItemStatus(
   propertyId: string,
   itemId: string,
-  status: 'not_started' | 'in_progress' | 'completed'
+  status: 'empty' | 'complete'
 ) {
   const supabase = await createClient()
 
@@ -140,19 +140,11 @@ export async function addPrepFile(
     return { error: error.message }
   }
 
-  // Auto-update status to in_progress if not already completed
-  const { data: item } = await supabase
+  // Auto-mark complete when a file is uploaded
+  await supabase
     .from('property_prep_items')
-    .select('status')
+    .update({ status: 'complete' })
     .eq('id', prepItemId)
-    .single()
-
-  if (item?.status === 'not_started') {
-    await supabase
-      .from('property_prep_items')
-      .update({ status: 'in_progress' })
-      .eq('id', prepItemId)
-  }
 
   await supabase.from('activity_logs').insert({
     property_id: propertyId,

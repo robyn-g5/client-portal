@@ -16,9 +16,8 @@ interface PrepChecklistProps {
 
 function StatusBadge({ status }: { status: string }) {
   const config = {
-    not_started: { label: 'Not Started', className: 'bg-gray-100 text-gray-600' },
-    in_progress: { label: 'In Progress', className: 'bg-amber-100 text-amber-700' },
-    completed: { label: 'Completed', className: 'bg-green-100 text-green-700' },
+    empty: { label: 'Empty', className: 'bg-gray-100 text-gray-600' },
+    complete: { label: 'Complete', className: 'bg-green-100 text-green-700' },
   }[status] || { label: status, className: 'bg-gray-100 text-gray-600' }
 
   return (
@@ -41,7 +40,7 @@ function PrepItemRow({
   const [isPending, startTransition] = useTransition()
   const hasFiles = item.property_prep_files && item.property_prep_files.length > 0
 
-  function handleStatusChange(newStatus: 'not_started' | 'in_progress' | 'completed') {
+  function handleStatusChange(newStatus: 'empty' | 'complete') {
     startTransition(async () => {
       await updatePrepItemStatus(propertyId, item.id, newStatus)
     })
@@ -50,8 +49,10 @@ function PrepItemRow({
   return (
     <div
       className={cn(
-        'bg-white rounded-xl border border-[#E2E8F0] transition-colors',
-        item.status === 'completed' && 'opacity-80'
+        'rounded-xl border transition-colors',
+        item.status === 'complete'
+          ? 'bg-green-50 border-green-200'
+          : 'bg-white border-[#E2E8F0]'
       )}
     >
       {/* Header row */}
@@ -62,7 +63,7 @@ function PrepItemRow({
               <span
                 className={cn(
                   'text-sm font-medium',
-                  item.status === 'completed' ? 'text-[#64748B] line-through' : 'text-[#1E2D3B]'
+                  item.status === 'complete' ? 'text-green-800' : 'text-[#1E2D3B]'
                 )}
               >
                 {item.label}
@@ -84,15 +85,12 @@ function PrepItemRow({
                   <select
                     value={item.status}
                     onChange={(e) =>
-                      handleStatusChange(
-                        e.target.value as 'not_started' | 'in_progress' | 'completed'
-                      )
+                      handleStatusChange(e.target.value as 'empty' | 'complete')
                     }
                     className="text-xs border border-[#E2E8F0] rounded-md px-2 py-1 text-[#64748B] bg-white cursor-pointer hover:border-[#3D4F5C] transition-colors"
                   >
-                    <option value="not_started">Not Started</option>
-                    <option value="in_progress">In Progress</option>
-                    <option value="completed">Completed</option>
+                    <option value="empty">Empty</option>
+                    <option value="complete">Complete</option>
                   </select>
                 )}
               </div>

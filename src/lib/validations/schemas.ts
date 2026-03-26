@@ -37,7 +37,7 @@ export const prepItemSchema = z.object({
   description: z.string().optional(),
   isRequired: z.boolean().default(true),
   notes: z.string().optional(),
-  status: z.enum(['not_started', 'in_progress', 'completed']).default('not_started'),
+  status: z.enum(['empty', 'complete']).default('empty'),
 })
 
 export const showingSchema = z.object({

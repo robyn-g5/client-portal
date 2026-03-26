@@ -1,6 +1,6 @@
 export type UserRole = 'agent' | 'client'
 export type PropertyStatus = 'draft' | 'active' | 'conditional' | 'sold'
-export type PrepStatus = 'not_started' | 'in_progress' | 'completed'
+export type PrepStatus = 'empty' | 'complete'
 export type FeedbackStatus = 'Requested' | 'Received' | 'No Response'
 export type DealTaskStatus = 'not_started' | 'in_progress' | 'completed'
 export type FintracType = 'FINTRAC' | 'RECO_GUIDE'

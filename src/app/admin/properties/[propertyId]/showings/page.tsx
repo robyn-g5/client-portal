@@ -4,19 +4,11 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { format } from 'date-fns'
-import { createShowing, deleteShowing, updateShowingFeedback } from '@/lib/actions/showings'
-import { cn } from '@/lib/utils'
+import { createShowing, deleteShowing } from '@/lib/actions/showings'
+import { ShowingRowEdit } from '@/components/property/ShowingEditForm'
 
 interface Props {
   params: Promise<{ propertyId: string }>
-}
-
-function feedbackPillClass(status: string) {
-  switch (status) {
-    case 'Received': return 'bg-green-100 text-green-700 border-green-200'
-    case 'Requested': return 'bg-blue-100 text-blue-700 border-blue-200'
-    default: return 'bg-gray-100 text-gray-600 border-gray-200'
-  }
 }
 
 export default async function AdminShowingsPage({ params }: Props) {
@@ -47,14 +39,6 @@ export default async function AdminShowingsPage({ params }: Props) {
     'use server'
     const showingId = formData.get('showingId') as string
     await deleteShowing(propertyId, showingId)
-  }
-
-  async function handleFeedbackUpdate(formData: FormData) {
-    'use server'
-    const showingId = formData.get('showingId') as string
-    const feedbackStatus = formData.get('feedbackStatus') as string
-    const feedbackText = formData.get('feedbackText') as string | undefined
-    await updateShowingFeedback(propertyId, showingId, feedbackStatus, feedbackText)
   }
 
   return (
@@ -143,6 +127,7 @@ export default async function AdminShowingsPage({ params }: Props) {
                 <th className="text-left px-5 py-3 text-xs font-semibold text-[#64748B] uppercase tracking-wide">Status</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-[#64748B] uppercase tracking-wide">Feedback</th>
                 <th className="px-5 py-3" />
+                <th className="px-5 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E2E8F0]">
@@ -159,14 +144,12 @@ export default async function AdminShowingsPage({ params }: Props) {
                   <td className="px-5 py-4">
                     <p className="text-sm text-[#1E2D3B]">{showing.agent_name}</p>
                   </td>
-                  <td className="px-5 py-4">
-                    <span className={cn('px-2.5 py-0.5 rounded-full text-xs font-medium border', feedbackPillClass(showing.feedback_status))}>
-                      {showing.feedback_status}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 max-w-xs">
-                    <p className="text-sm text-[#64748B] truncate">{showing.feedback_text || '—'}</p>
-                  </td>
+                  <ShowingRowEdit
+                    propertyId={propertyId}
+                    showingId={showing.id}
+                    currentStatus={showing.feedback_status}
+                    currentFeedback={showing.feedback_text}
+                  />
                   <td className="px-5 py-4">
                     <form action={handleDelete} className="inline">
                       <input type="hidden" name="showingId" value={showing.id} />
