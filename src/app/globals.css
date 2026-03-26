@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 210 35% 17%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 35% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 35% 17%;
+    --primary: 205 20% 29%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 210 35% 17%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 96 52% 48%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 205 20% 29%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 210 35% 10%;
+    --foreground: 0 0% 98%;
+    --card: 210 35% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 210 35% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 96 52% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 35% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 210 35% 18%;
+    --muted-foreground: 215 16% 65%;
+    --accent: 96 52% 48%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 35% 20%;
+    --input: 210 35% 20%;
+    --ring: 96 52% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* TipTap rich text editor styles */
+.tiptap {
+  @apply min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  @apply text-muted-foreground;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap h1 {
+  @apply text-2xl font-bold mb-4;
+}
+.tiptap h2 {
+  @apply text-xl font-semibold mb-3;
+}
+.tiptap h3 {
+  @apply text-lg font-semibold mb-2;
+}
+.tiptap ul {
+  @apply list-disc pl-6 mb-3;
+}
+.tiptap ol {
+  @apply list-decimal pl-6 mb-3;
+}
+.tiptap p {
+  @apply mb-2;
+}
+.tiptap strong {
+  @apply font-semibold;
+}
+.tiptap em {
+  @apply italic;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-foreground;
+}
