@@ -211,7 +211,7 @@ function AddDocumentForm({ propertyId }: { propertyId: string }) {
 }
 
 export function PrepChecklist({ items, propertyId, canEdit = false }: PrepChecklistProps) {
-  const completedCount = items.filter((i) => i.status === 'completed').length
+  const completedCount = items.filter((i) => i.status === 'complete').length
   const totalCount = items.length
   const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
