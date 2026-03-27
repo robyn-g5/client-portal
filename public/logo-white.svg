@@ -1,11 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" fill="none">
-  <!-- Hexagon Badge -->
-  <path d="M25 10 L55 10 L70 50 L55 90 L25 90 L10 50 Z" fill="#3D4F5C"/>
-  <!-- Pine Tree -->
-  <path d="M32 70 C32 70 35 55 40 50 C38 52 36 51 36 51 C36 51 42 40 47 35 C45 37 43 36 43 36 C43 36 48 28 52 25 C52 25 48 30 48 32 C48 32 55 28 58 32 C55 32 52 35 52 35 C52 35 60 38 58 45 C55 42 52 44 52 44 C52 44 56 52 52 60 C50 56 47 58 47 58 C47 58 48 70 40 75 L32 70 Z" fill="#6DBF3A"/>
-  <!-- iMuskoka Text (White) -->
-  <circle cx="100" cy="35" r="3.5" fill="#FFFFFF"/>
-  <text x="97" y="72" font-family="Arial, sans-serif" font-weight="600" font-size="38" fill="#FFFFFF">iMuskoka</text>
-  <!-- Properties Text (White) -->
-  <text x="100" y="92" font-family="Arial, sans-serif" font-weight="400" font-size="14" letter-spacing="5" fill="#FFFFFF">PROPERTIES</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 60" fill="none">
+  <!-- Hexagon badge -->
+  <path d="M30 0L55.98 15v30L30 60 4.02 45V15L30 0z" fill="#454F5B"/>
+  <!-- Stylized pine tree with curved trunk and 3 branches -->
+  <g fill="#7CB342" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main curved trunk -->
+    <path d="M30 50 C28 42, 24 35, 22 28 C20 22, 22 16, 28 12" fill="none" stroke-width="4"/>
+    <!-- Top branch with leaf tip -->
+    <path d="M28 12 C32 10, 36 8, 38 6" fill="none" stroke-width="3"/>
+    <circle cx="38" cy="6" r="2" fill="#7CB342"/>
+    <!-- Middle branch -->
+    <path d="M24 24 C18 22, 14 20, 12 18" fill="none" stroke-width="3"/>
+    <!-- Bottom branch -->
+    <path d="M26 34 C20 34, 16 33, 13 32" fill="none" stroke-width="3"/>
+  </g>
+  <!-- iMuskoka text - white for dark backgrounds -->
+  <text x="70" y="32" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#FFFFFF">iMuskoka</text>
+  <!-- PROPERTIES text - white for dark backgrounds -->
+  <text x="72" y="50" font-family="Arial, sans-serif" font-size="11" letter-spacing="3" fill="#FFFFFF">PROPERTIES</text>
 </svg>
