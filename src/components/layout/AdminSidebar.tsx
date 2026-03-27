@@ -34,10 +34,11 @@ export function AdminSidebar({ agentName, onLogout }: AdminSidebarProps) {
       <div className="p-5 border-b border-white/10">
         <Link href="/admin">
           <Image
-            src="/logo-white.svg"
+            src="/logo.svg"
             alt="iMuskoka Properties"
             width={160}
             height={44}
+            className="brightness-0 invert"
           />
         </Link>
         <span className="mt-2 block text-xs font-medium text-[#6DBF3A] uppercase tracking-widest">

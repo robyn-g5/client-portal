@@ -8,7 +8,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt="iMuskoka Properties"
             width={220}
             height={60}

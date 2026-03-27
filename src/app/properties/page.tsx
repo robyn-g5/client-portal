@@ -38,7 +38,7 @@ export default async function PropertiesPage() {
     <div className="min-h-screen bg-[#F8F9FA]">
       {/* Top Nav */}
       <header className="bg-white border-b border-[#E2E8F0] px-6 py-4 flex items-center justify-between">
-        <Image src="/logo.png" alt="iMuskoka Properties" width={180} height={48} />
+        <Image src="/logo.svg" alt="iMuskoka Properties" width={180} height={48} />
         <div className="flex items-center gap-4">
           <span className="text-sm text-[#64748B]">
             Welcome, <span className="font-medium text-[#1E2D3B]">{profile?.full_name}</span>
