@@ -98,7 +98,7 @@ export function Sidebar({ property, userFullName, onLogout }: SidebarProps) {
       {/* Logo */}
       <div className="p-5 border-b border-white/10">
         <Link href="/properties">
-          <Image src="/logo.svg" alt="iMuskoka Properties" width={160} height={44} className="brightness-0 invert" />
+          <Image src="/logo-white.svg" alt="iMuskoka Properties" width={160} height={44} />
         </Link>
       </div>
 
