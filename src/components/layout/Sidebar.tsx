@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
@@ -97,8 +96,9 @@ export function Sidebar({ property, userFullName, onLogout }: SidebarProps) {
     <aside className="w-64 flex-shrink-0 bg-[#3D4F5C] min-h-screen flex flex-col">
       {/* Logo */}
       <div className="p-5 border-b border-white/10">
-        <Link href="/properties">
-          <Image src="/logo-white.svg" alt="iMuskoka Properties" width={160} height={44} />
+        <Link href="/properties" className="block">
+          <span className="text-white font-bold text-xl">iMuskoka</span>
+          <span className="block text-white/70 text-xs tracking-widest uppercase">Properties</span>
         </Link>
       </div>
 
