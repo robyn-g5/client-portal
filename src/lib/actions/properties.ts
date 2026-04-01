@@ -1,14 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { requireAgent } from '@/lib/auth'
 import { createPropertySchema, appointmentSchema } from '@/lib/validations/schemas'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function createProperty(formData: FormData) {
-  await requireAgent()
+  const agentProfile = await requireAgent()
   const supabase = await createClient()
+  const adminSupabase = createAdminClient()
 
   const rawData = {
     clientEmail: formData.get('clientEmail') as string,
@@ -27,13 +29,6 @@ export async function createProperty(formData: FormData) {
 
   const { data } = parsed
 
-  // Use service-role admin client to create auth user with password
-  const { createClient: createAdminClient } = await import('@supabase/supabase-js')
-  const adminSupabase = createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-
   // Check if a client with this email already exists
   const { data: existingUsersList } = await adminSupabase.auth.admin.listUsers()
   const existingAuthUser = existingUsersList?.users?.find(
@@ -44,7 +39,7 @@ export async function createProperty(formData: FormData) {
 
   if (existingAuthUser) {
     // Reuse existing auth user — look up their profile
-    const { data: existingProfile } = await supabase
+    const { data: existingProfile } = await adminSupabase
       .from('client_profiles')
       .select('id')
       .eq('user_id', existingAuthUser.id)
@@ -67,7 +62,7 @@ export async function createProperty(formData: FormData) {
       return { error: `Failed to create client user: ${createUserError?.message}` }
     }
 
-    // Create client profile
+    // Create client profile — set agent_id so RLS scoping works
     const { data: newProfile, error: profileError } = await adminSupabase
       .from('client_profiles')
       .insert({
@@ -75,6 +70,8 @@ export async function createProperty(formData: FormData) {
         full_name: data.clientName,
         phone: data.clientPhone || null,
         role: 'client',
+        agent_id: agentProfile.user_id,
+        is_approved: true,
       })
       .select('id')
       .single()
@@ -86,8 +83,8 @@ export async function createProperty(formData: FormData) {
     clientProfileId = newProfile.id
   }
 
-  // Create property
-  const { data: property, error: propertyError } = await supabase
+  // Create property via admin client so RLS doesn't block the insert
+  const { data: property, error: propertyError } = await adminSupabase
     .from('properties')
     .insert({
       client_id: clientProfileId,
@@ -257,11 +254,7 @@ export async function setClientPassword(clientUserId: string, newPassword: strin
     return { error: 'Password must be at least 8 characters.' }
   }
 
-  const { createClient: createAdminClient } = await import('@supabase/supabase-js')
-  const adminSupabase = createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  const adminSupabase = createAdminClient()
 
   const { error } = await adminSupabase.auth.admin.updateUserById(clientUserId, {
     password: newPassword,
