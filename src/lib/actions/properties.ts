@@ -247,6 +247,23 @@ export async function getClientProperties() {
   return data || []
 }
 
+export async function deleteProperty(propertyId: string) {
+  await requireAgent()
+  const adminSupabase = createAdminClient()
+
+  const { error } = await adminSupabase
+    .from('properties')
+    .delete()
+    .eq('id', propertyId)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath('/admin/properties')
+  return { success: true }
+}
+
 export async function setClientPassword(clientUserId: string, newPassword: string) {
   await requireAgent()
 

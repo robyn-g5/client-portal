@@ -2,6 +2,7 @@ import { requireAgent } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { PlusCircle, Search, MapPin, Building2, ChevronRight } from 'lucide-react'
+import { DeletePropertyButton } from '@/components/DeletePropertyButton'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 
@@ -175,6 +176,10 @@ export default async function AdminPropertiesPage({ searchParams }: Props) {
                         Manage
                         <ChevronRight className="h-4 w-4" />
                       </Link>
+                      <DeletePropertyButton
+                        propertyId={property.id}
+                        propertyTitle={property.title}
+                      />
                     </td>
                   </tr>
                 )
