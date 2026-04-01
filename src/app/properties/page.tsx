@@ -5,7 +5,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { logout } from '@/lib/actions/auth'
 import { MapPin, ChevronRight, Home } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { PropertyStatus } from '@/lib/types/database'
 
@@ -49,6 +48,7 @@ export default async function PropertiesPage() {
               Sign out
             </Button>
           </form>
+        </div>
         </div>
       </header>
 
