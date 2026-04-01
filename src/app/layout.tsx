@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: 'iMuskoka Properties | Client Portal',
   description: 'Your personal real estate dashboard for iMuskoka Properties',
   icons: {
-    icon: '/logo.svg',
+    icon: '/logo.png',
   },
 }
 

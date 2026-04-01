@@ -14,6 +14,7 @@ import {
   Activity,
   LogOut,
   MapPin,
+  LayoutDashboard,
 } from 'lucide-react'
 import type { Property } from '@/lib/types/database'
 
@@ -30,6 +31,12 @@ function getTabItems(property: Property) {
   const isConditionalOrSold = ['conditional', 'sold'].includes(status)
 
   return [
+    {
+      label: 'Dashboard',
+      href: `/properties/${property.id}/dashboard`,
+      icon: LayoutDashboard,
+      enabled: true,
+    },
     {
       label: 'Listing Appointment',
       href: `/properties/${property.id}/listing-appointment`,
@@ -66,12 +73,6 @@ function getTabItems(property: Property) {
       icon: Handshake,
       enabled: isConditionalOrSold,
     },
-    {
-      label: 'Activity',
-      href: `/properties/${property.id}/activity`,
-      icon: Activity,
-      enabled: true,
-    },
   ]
 }
 
@@ -97,8 +98,8 @@ export function Sidebar({ property, userFullName, onLogout }: SidebarProps) {
     <aside className="w-64 flex-shrink-0 bg-[#3D4F5C] min-h-screen flex flex-col">
       {/* Logo */}
       <div className="p-5 border-b border-white/10">
-        <Link href="/properties">
-          <Image src="/logo.svg" alt="iMuskoka Properties" width={160} height={44} className="brightness-0 invert" />
+        <Link href="/properties" className="block bg-white/95 rounded-lg p-2 transition-opacity hover:opacity-90">
+          <Image src="/logo.png" alt="iMuskoka Properties" width={205} height={44} className="w-auto h-8" />
         </Link>
       </div>
 

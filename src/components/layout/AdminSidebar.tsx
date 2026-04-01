@@ -32,13 +32,13 @@ export function AdminSidebar({ agentName, onLogout }: AdminSidebarProps) {
     <aside className="w-64 flex-shrink-0 bg-[#1E2D3B] min-h-screen flex flex-col">
       {/* Logo */}
       <div className="p-5 border-b border-white/10">
-        <Link href="/admin">
+        <Link href="/admin" className="block bg-white/95 rounded-lg p-2 mb-3 transition-opacity hover:opacity-90">
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="iMuskoka Properties"
-            width={160}
+            width={205}
             height={44}
-            className="brightness-0 invert"
+            className="w-auto h-8"
           />
         </Link>
         <span className="mt-2 block text-xs font-medium text-[#6DBF3A] uppercase tracking-widest">
