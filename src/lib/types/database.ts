@@ -3,6 +3,7 @@ export type PropertyStatus = 'draft' | 'active' | 'conditional' | 'sold'
 export type PrepStatus = 'empty' | 'complete'
 export type FeedbackStatus = 'Requested' | 'Received' | 'No Response'
 export type DealTaskStatus = 'not_started' | 'in_progress' | 'completed'
+export type PropertyTaskStatus = 'pending' | 'completed'
 export type FintracType = 'FINTRAC' | 'RECO_GUIDE'
 export type FintracStatus = 'required' | 'uploaded'
 export type TimelineCategory = 'milestone' | 'task' | 'document' | 'showing'
@@ -14,6 +15,9 @@ export interface ClientProfile {
   full_name: string
   phone: string | null
   role: UserRole
+  agent_id: string | null
+  is_approved: boolean
+  is_super_admin: boolean
   created_at: string
 }
 
@@ -146,5 +150,26 @@ export interface ActivityLog {
   property_id: string
   user_id: string | null
   message: string
+  created_at: string
+}
+
+export interface PropertyTask {
+  id: string
+  property_id: string
+  title: string
+  description: string | null
+  status: PropertyTaskStatus
+  due_date: string | null
+  file_url: string | null
+  created_at: string
+}
+
+export interface PropertyAppointment {
+  id: string
+  property_id: string
+  title: string
+  appointment_type: string
+  scheduled_at: string
+  description: string | null
   created_at: string
 }

@@ -11,10 +11,12 @@ import {
   ClipboardList,
   LogOut,
   PlusCircle,
+  Users,
 } from 'lucide-react'
 
 interface AdminSidebarProps {
   agentName: string
+  isSuperAdmin: boolean
   onLogout: () => void
 }
 
@@ -25,7 +27,7 @@ const navItems = [
   { label: 'Templates', href: '/admin/templates', icon: ClipboardList, exact: false },
 ]
 
-export function AdminSidebar({ agentName, onLogout }: AdminSidebarProps) {
+export function AdminSidebar({ agentName, isSuperAdmin, onLogout }: AdminSidebarProps) {
   const pathname = usePathname()
 
   return (
@@ -81,6 +83,21 @@ export function AdminSidebar({ agentName, onLogout }: AdminSidebarProps) {
             </Link>
           )
         })}
+
+        {isSuperAdmin && (
+          <Link
+            href="/admin/agents"
+            className={cn(
+              'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+              pathname.startsWith('/admin/agents')
+                ? 'bg-white/15 text-white'
+                : 'text-white/70 hover:bg-white/10 hover:text-white'
+            )}
+          >
+            <Users className="h-4 w-4 flex-shrink-0" />
+            <span>Agents</span>
+          </Link>
+        )}
       </nav>
 
       {/* Footer */}

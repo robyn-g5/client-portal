@@ -32,5 +32,12 @@ export async function requireAuth() {
 export async function requireAgent() {
   const profile = await getUserProfile()
   if (!profile || profile.role !== 'agent') redirect('/properties')
+  if (!profile.is_approved) redirect('/pending-approval')
+  return profile
+}
+
+export async function requireSuperAdmin() {
+  const profile = await getUserProfile()
+  if (!profile || !profile.is_super_admin) redirect('/admin')
   return profile
 }

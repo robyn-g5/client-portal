@@ -32,45 +32,60 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  // Public routes that don't need auth
-  const publicRoutes = ['/login']
+  const publicRoutes = ['/login', '/signup', '/pending-approval']
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route))
 
-  // If not authenticated and trying to access protected route
+  // Redirect unauthenticated users away from protected routes
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  // If authenticated, check role-based routing
-  if (user && !isPublicRoute) {
-    // Fetch user profile to get role
+  if (user) {
     const { data: profile } = await supabase
       .from('client_profiles')
-      .select('role')
+      .select('role, is_approved, is_super_admin')
       .eq('user_id', user.id)
       .single()
 
-    // Protect /admin routes from non-agents
+    // Authenticated user hitting a public route → redirect to their dashboard
+    if (isPublicRoute && pathname !== '/pending-approval') {
+      if (profile?.role === 'agent') {
+        const url = request.nextUrl.clone()
+        if (!profile.is_approved) {
+          url.pathname = '/pending-approval'
+        } else {
+          url.pathname = '/admin'
+        }
+        return NextResponse.redirect(url)
+      } else if (profile?.role === 'client') {
+        const url = request.nextUrl.clone()
+        url.pathname = '/properties'
+        return NextResponse.redirect(url)
+      }
+    }
+
+    // Unapproved agents can only see /pending-approval
+    if (profile?.role === 'agent' && !profile.is_approved && pathname !== '/pending-approval') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/pending-approval'
+      return NextResponse.redirect(url)
+    }
+
+    // /admin/agents is super-admin only
+    if (pathname.startsWith('/admin/agents') && !profile?.is_super_admin) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/admin'
+      return NextResponse.redirect(url)
+    }
+
+    // /admin/* is agents only
     if (pathname.startsWith('/admin') && profile?.role !== 'agent') {
       const url = request.nextUrl.clone()
       url.pathname = '/properties'
       return NextResponse.redirect(url)
     }
-  }
-
-  // If authenticated and hitting /login, redirect to appropriate page
-  if (user && pathname === '/login') {
-    const { data: profile } = await supabase
-      .from('client_profiles')
-      .select('role')
-      .eq('user_id', user.id)
-      .single()
-
-    const url = request.nextUrl.clone()
-    url.pathname = profile?.role === 'agent' ? '/admin' : '/properties'
-    return NextResponse.redirect(url)
   }
 
   return supabaseResponse

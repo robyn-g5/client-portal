@@ -16,7 +16,11 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   const profile = await requireAgent()
 
   const sidebar = (
-    <AdminSidebar agentName={profile.full_name} onLogout={handleLogout} />
+    <AdminSidebar
+      agentName={profile.full_name}
+      isSuperAdmin={profile.is_super_admin ?? false}
+      onLogout={handleLogout}
+    />
   )
 
   return (
