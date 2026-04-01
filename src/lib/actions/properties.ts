@@ -120,7 +120,7 @@ export async function createProperty(formData: FormData) {
         label: item.label,
         description: item.description,
         is_required: item.is_required,
-        status: 'not_started',
+        status: 'empty',
         created_by: 'agent',
       }))
     )
